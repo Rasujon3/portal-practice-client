@@ -6,8 +6,10 @@ import BookingModal from "./BookingModal";
 const AvailableAppointments = ({ date }) => {
   const [services, setServices] = useState([]);
   const [treatment, setTreatment] = useState(null);
+
+  const formattedDate = format(date, "PP");
   useEffect(() => {
-    const url = `http://localhost:5000/service`;
+    const url = `http://localhost:5000/available?date=${formattedDate}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setServices(data));
