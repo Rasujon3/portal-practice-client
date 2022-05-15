@@ -11,6 +11,7 @@ import Loading from "../Shared/Loading";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import useToken from "./../../hooks/useToken";
 
 const SignUp = () => {
   // form validation rules
@@ -39,6 +40,8 @@ const SignUp = () => {
   const [sendEmailVerification, sending, verifyError] =
     useSendEmailVerification(auth);
 
+  const [token] = useToken(gUser || user);
+
   const navigate = useNavigate();
 
   let signInerror;
@@ -55,11 +58,12 @@ const SignUp = () => {
   } = useForm(formOptions);
 
   useEffect(() => {
-    if (gUser || user) {
+    if (token) {
       // console.log(gUser || user);
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
+      navigate("/appointment");
     }
-  }, [gUser, user, from, navigate]);
+  }, [token, navigate]);
 
   if (loading || gLoading || updating || sending) {
     return <Loading />;
@@ -93,7 +97,7 @@ const SignUp = () => {
       console.log("update done");
       console.log("sent email");
       // navigate("/appointment");
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
     }
   };
   return (
@@ -222,7 +226,7 @@ const SignUp = () => {
             </div>
             {signInerror}
             <p className="mb-2">
-              <span class="label-text-alt">
+              <span className="label-text-alt">
                 <Link className="hover:text-primary" to="/forgetpassword">
                   Forget Password?
                 </Link>
